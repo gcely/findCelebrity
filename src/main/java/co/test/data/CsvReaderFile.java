@@ -15,30 +15,30 @@ import co.test.celebrity.Person;
 
 public class CsvReaderFile {
 	
-	private String inputFilePath;
+	private String filePath;
 	
 	public CsvReaderFile () {
 		ClassLoader classLoader = getClass().getClassLoader();
-		this.inputFilePath = classLoader.getResource("MOCK_DATA.csv").getFile();
+		this.filePath = classLoader.getResource("MOCK_DATA.csv").getFile();
 	}
 	
 	public List<Person> getMeetPeopleList() {
 	    List<Person> inputList = new ArrayList<Person>();
 	    try{
-	      File inputF = new File(inputFilePath);
-	      InputStream inputFS = new FileInputStream(inputF);
-	      BufferedReader br = new BufferedReader(new InputStreamReader(inputFS));
-	      // skip the header of the csv
-	      inputList = br.lines().skip(1).map(mapToItem).collect(Collectors.toList());
-	      br.close();
+		File inputF = new File(filePath);
+		InputStream inputFS = new FileInputStream(inputF);
+		BufferedReader br = new BufferedReader(new InputStreamReader(inputFS));
+		// skip the header of the csv
+		inputList = br.lines().skip(1).map(mapToPerson).collect(Collectors.toList());
+		br.close();
 	    } catch (IOException e) {
-	      System.out.println(e.getMessage());
+		System.out.println(e.getMessage());
 	    }
 	    return inputList ;
 	}
 	
-	private Function<String, Person> mapToItem = (line) -> {
-		String[] p = line.split(",");// a CSV has comma separated lines
+	private Function<String, Person> mapToPerson = (row) -> {
+		String[] p = row.split(",");// a CSV has comma separated lines
 		Person person = new Person(new Integer(p[0]), p[1], p[2], p[3], p[4], new Integer(p[5]));
 		return person;
 	};
